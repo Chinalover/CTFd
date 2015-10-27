@@ -9,7 +9,9 @@ Install:
  3. Use `python serve.py` in a terminal to drop into debug mode.
  4. [Here](https://github.com/isislab/CTFd/wiki/Deployment) are some deployment options
 
-Live Demo:
-[https://demo.ctfd.io/](https://demo.ctfd.io/)
-
+remeber to edit the config.py to change the domain of your webstie
+and the smtp username,passsword in utils.py also need to be edit.
+the function of edit user message may have bug ,pay attention to it.
+don't use the flask,it's so terrible,see (https://github.com/isislab/CTFd/wiki/Deployment.
+NJUPT ctf practice website:http://ctf.nuptsast.com
 Logo by [Laura Barbera](http://www.laurabb.com/)
