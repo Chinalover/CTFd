@@ -16,7 +16,8 @@ import requests
 import logging
 import os
 import sys
-
+import smtplib
+from email.mime.text import MIMEText
 
 def init_logs(app):
     logger_keys = logging.getLogger('keys')
@@ -243,28 +244,24 @@ def mailserver():
 
 
 def sendmail(addr, text):
-    if get_config('mg_api_key') and app.config['ADMINS']:
-        ctf_name = get_config('ctf_name')
-        mg_api_key = get_config('mg_api_key')
-        return requests.post(
-            "https://api.mailgun.net/v2/mail"+app.config['HOST']+"/messages",
-            auth=("api", mg_api_key),
-            data={"from": "{} Admin <{}>".format(ctf_name, app.config['ADMINS'][0]),
-                  "to": [addr],
-                  "subject": "Message from {0}".format(ctf_name),
-                  "text": text})
-    elif app.config['MAIL_SERVER'] and app.config['MAIL_PORT'] and app.config['ADMINS']:
-        try:
-            msg = Message("Message from {0}".format(get_config('ctf_name')), sender=app.config['ADMINS'][0], recipients=[addr])
-            msg.body = text
-            mail.send(msg)
-            return True
-        except:
-            return False
-    else:
+    mail_host="smtp.163.com"           
+    mail_user="chinalover0223"             
+    mail_pass=""                        
+    mail_postfix="163.com"
+    me="NCTF findpass"+"<"+mail_user+"@"+mail_postfix+">"
+    msg = MIMEText(text,_subtype='plain')
+    msg['Subject']="NCTF findpass"
+    msg['From'] = me
+    msg['To'] =addr
+    try:
+        server = smtplib.SMTP()
+        server.connect(mail_host)                           
+        server.login(mail_user,mail_pass)               
+        server.sendmail(me,addr, msg.as_string())
+        server.close()
+        return True
+    except Exception, e:
         return False
-
-
 def rmdir(dir):
     shutil.rmtree(dir, ignore_errors=True)
 
@@ -281,4 +278,5 @@ def validate_url(url):
 
 def sha512(string):
     return hashlib.sha512(string).hexdigest()
+
 
